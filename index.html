@@ -604,6 +604,73 @@
             z-index: 1;
         }
 
+        .info-panel-header-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .info-panel-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            margin-left: 16px;
+        }
+
+        .info-panel-temp {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .info-panel-temp-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Quick stats row */
+        .info-panel-stats {
+            display: flex;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .info-stat {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .info-stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .info-stat-value.placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .info-stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-stat-sublabel {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 2px;
+        }
+
         .info-panel-title {
             font-size: 22px;
             font-weight: 600;
@@ -2137,14 +2204,50 @@
                             {selectedLocation && (
                                 <>
                                     <div className="info-panel-header">
-                                        <div>
+                                        <div className="info-panel-header-left">
                                             <div className="info-panel-title">{selectedLocation.name}</div>
                                             {selectedLocation.displayName !== selectedLocation.name && (
                                                 <div className="info-panel-subtitle">{selectedLocation.displayName}</div>
                                             )}
                                         </div>
+                                        <div className="info-panel-header-right">
+                                            {CLIMATE_DATA[selectedLocation.country] && (
+                                                <>
+                                                    <div
+                                                        className="info-panel-temp"
+                                                        style={{ color: tempToColor(CLIMATE_DATA[selectedLocation.country][selectedMonth]) }}
+                                                    >
+                                                        {CLIMATE_DATA[selectedLocation.country][selectedMonth]}°C
+                                                    </div>
+                                                    <div className="info-panel-temp-label">{MONTHS[selectedMonth]}</div>
+                                                </>
+                                            )}
+                                        </div>
                                         <button className="close-btn" onClick={closeInfoPanel}>×</button>
                                     </div>
+
+                                    {/* Quick Stats */}
+                                    <div className="info-panel-stats">
+                                        <div className="info-stat">
+                                            <div
+                                                className="info-stat-value"
+                                                style={CLIMATE_DATA[selectedLocation.country] ? { color: tempToColor(CLIMATE_DATA[selectedLocation.country][selectedMonth]) } : {}}
+                                            >
+                                                {CLIMATE_DATA[selectedLocation.country]
+                                                    ? `${CLIMATE_DATA[selectedLocation.country][selectedMonth]}°C`
+                                                    : '—'
+                                                }
+                                            </div>
+                                            <div className="info-stat-label">Temperature</div>
+                                            <div className="info-stat-sublabel">{MONTHS[selectedMonth]} avg</div>
+                                        </div>
+                                        <div className="info-stat">
+                                            <div className="info-stat-value placeholder">—</div>
+                                            <div className="info-stat-label">Flights from</div>
+                                            <div className="info-stat-sublabel">{MONTHS[selectedMonth]} avg</div>
+                                        </div>
+                                    </div>
+
                                     <div className="info-panel-content">
                                         {isLoadingWiki ? (
                                             <div className="wiki-loading">Loading information...</div>
@@ -2155,14 +2258,6 @@
                                         {/* Climate Section */}
                                         {CLIMATE_DATA[selectedLocation.country] ? (
                                             <div className="climate-section">
-                                                <div className="climate-highlight">
-                                                    <div className="climate-highlight-temp" style={{ color: tempToColor(CLIMATE_DATA[selectedLocation.country][selectedMonth]) }}>
-                                                        {CLIMATE_DATA[selectedLocation.country][selectedMonth]}°C
-                                                    </div>
-                                                    <div className="climate-highlight-label">
-                                                        Average temperature in {MONTHS[selectedMonth]}
-                                                    </div>
-                                                </div>
                                                 <div className="climate-section-title">Year-round Climate</div>
                                                 <div className="climate-chart">
                                                     {CLIMATE_DATA[selectedLocation.country].map((temp, idx) => {
@@ -2188,18 +2283,7 @@
                                                     })}
                                                 </div>
                                             </div>
-                                        ) : (
-                                            <div className="climate-section">
-                                                <div className="climate-highlight">
-                                                    <div className="climate-highlight-temp" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                                                        —
-                                                    </div>
-                                                    <div className="climate-highlight-label">
-                                                        Climate data not available
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
+                                        ) : null}
                                     </div>
                                     <div className="info-panel-actions">
                                         <button
