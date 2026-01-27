@@ -639,8 +639,13 @@
                     setPlaces(prev => [...prev, newPlace]);
                 }
 
-                setSearchQuery('');
-                setShowResults(false);
+                if (type === 'visited') {
+                    setVisitedSearchQuery('');
+                    setShowVisitedResults(false);
+                } else {
+                    setWishlistSearchQuery('');
+                    setShowWishlistResults(false);
+                }
             };
 
             // Remove location
@@ -673,20 +678,18 @@
                                     type="text"
                                     className="search-input"
                                     placeholder="Search countries, cities..."
-                                    value={mode === 'visited' ? searchQuery : ''}
-                                    onChange={(e) => {
-                                        if (mode === 'visited') setSearchQuery(e.target.value);
-                                    }}
-                                    onFocus={() => mode === 'visited' && searchQuery && setShowResults(true)}
-                                    onBlur={() => setTimeout(() => setShowResults(false), 200)}
+                                    value={visitedSearchQuery}
+                                    onChange={(e) => setVisitedSearchQuery(e.target.value)}
+                                    onFocus={() => visitedSearchQuery && setShowVisitedResults(true)}
+                                    onBlur={() => setTimeout(() => setShowVisitedResults(false), 200)}
                                 />
-                                {mode === 'visited' && showResults && (
+                                {showVisitedResults && (
                                     <div className="search-results visible">
-                                        {isSearching && <div className="loading-message">Searching...</div>}
-                                        {!isSearching && searchResults.length === 0 && searchQuery && (
+                                        {isSearchingVisited && <div className="loading-message">Searching...</div>}
+                                        {!isSearchingVisited && visitedSearchResults.length === 0 && visitedSearchQuery && (
                                             <div className="no-results">No locations found</div>
                                         )}
-                                        {!isSearching && searchResults.map((result, idx) => (
+                                        {!isSearchingVisited && visitedSearchResults.map((result, idx) => (
                                             <div
                                                 key={idx}
                                                 className="search-result-item"
@@ -750,20 +753,18 @@
                                     type="text"
                                     className="search-input"
                                     placeholder="Search countries, cities..."
-                                    value={mode === 'wishlist' ? searchQuery : ''}
-                                    onChange={(e) => {
-                                        if (mode === 'wishlist') setSearchQuery(e.target.value);
-                                    }}
-                                    onFocus={() => mode === 'wishlist' && searchQuery && setShowResults(true)}
-                                    onBlur={() => setTimeout(() => setShowResults(false), 200)}
+                                    value={wishlistSearchQuery}
+                                    onChange={(e) => setWishlistSearchQuery(e.target.value)}
+                                    onFocus={() => wishlistSearchQuery && setShowWishlistResults(true)}
+                                    onBlur={() => setTimeout(() => setShowWishlistResults(false), 200)}
                                 />
-                                {mode === 'wishlist' && showResults && (
+                                {showWishlistResults && (
                                     <div className="search-results visible">
-                                        {isSearching && <div className="loading-message">Searching...</div>}
-                                        {!isSearching && searchResults.length === 0 && searchQuery && (
+                                        {isSearchingWishlist && <div className="loading-message">Searching...</div>}
+                                        {!isSearchingWishlist && wishlistSearchResults.length === 0 && wishlistSearchQuery && (
                                             <div className="no-results">No locations found</div>
                                         )}
-                                        {!isSearching && searchResults.map((result, idx) => (
+                                        {!isSearchingWishlist && wishlistSearchResults.map((result, idx) => (
                                             <div
                                                 key={idx}
                                                 className="search-result-item"
