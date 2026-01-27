@@ -25,17 +25,188 @@
         .app-container {
             height: 100vh;
             display: grid;
-            grid-template-columns: 320px 1fr 320px;
+            grid-template-columns: 340px 1fr;
             gap: 0;
         }
 
-        /* Site Header */
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(5, 32, 60, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(7, 112, 227, 0.9);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #05203c;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-logo span {
+            background: linear-gradient(135deg, #0770e3 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-tagline {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .sidebar-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            background: linear-gradient(135deg, #0770e3 0%, #00d4ff 100%);
+            color: #ffffff;
+        }
+
+        .sidebar-action-btn:hover {
+            box-shadow: 0 4px 15px rgba(7, 112, 227, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px 20px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .tab.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0770e3 0%, #00d4ff 100%);
+        }
+
+        .tab-badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+
+        .tab.active .tab-badge {
+            background: rgba(7, 112, 227, 0.3);
+            color: #00d4ff;
+        }
+
+        /* Tab content */
+        .tab-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-panel {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .tab-panel.active {
+            display: flex;
+        }
+
+        .panel-search {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Site Header - hidden on desktop, visible on mobile */
         .site-header {
             position: absolute;
             top: 24px;
             left: 24px;
             z-index: 70;
             text-align: left;
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .site-header {
+                display: block;
+            }
         }
 
         .site-logo {
@@ -546,29 +717,97 @@
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .app-container {
-                grid-template-columns: 280px 1fr 280px;
-            }
-        }
-
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .app-container {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr;
             }
 
-            .side-panel {
-                height: auto;
-                max-height: 40vh;
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 320px;
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 150;
+                box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
             }
 
-            .side-panel:last-child {
-                display: none;
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.6);
+                z-index: 140;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .sidebar-overlay.visible {
+                opacity: 1;
+                visibility: visible;
             }
 
             .globe-container {
-                height: 60vh;
+                height: 100vh;
+            }
+
+            .site-header {
+                left: 80px;
+            }
+
+            .month-selector {
+                padding: 10px 12px;
+                gap: 4px;
+            }
+
+            .month-selector-label {
+                display: none;
+            }
+
+            .month-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 10px;
+            }
+
+            .temp-filter {
+                width: 180px;
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-header {
+                left: 70px;
+                top: 16px;
+            }
+
+            .site-logo {
+                font-size: 20px;
+            }
+
+            .site-tagline {
+                display: none;
+            }
+
+            .temp-filter {
+                top: 70px;
+                right: 10px;
+                width: 160px;
+            }
+
+            .month-selector {
+                bottom: 16px;
             }
         }
 
@@ -1129,16 +1368,12 @@
 
         function TravelTracker() {
             const [places, setPlaces] = useState([]);
-            const [visitedSearchQuery, setVisitedSearchQuery] = useState('');
-            const [wishlistSearchQuery, setWishlistSearchQuery] = useState('');
-            const [visitedSearchResults, setVisitedSearchResults] = useState([]);
-            const [wishlistSearchResults, setWishlistSearchResults] = useState([]);
-            const [isSearchingVisited, setIsSearchingVisited] = useState(false);
-            const [isSearchingWishlist, setIsSearchingWishlist] = useState(false);
-            const [showVisitedResults, setShowVisitedResults] = useState(false);
-            const [showWishlistResults, setShowWishlistResults] = useState(false);
-            const [showVisitedSearch, setShowVisitedSearch] = useState(false);
-            const [showWishlistSearch, setShowWishlistSearch] = useState(false);
+            const [searchQuery, setSearchQuery] = useState('');
+            const [searchResults, setSearchResults] = useState([]);
+            const [isSearching, setIsSearching] = useState(false);
+            const [showSearchResults, setShowSearchResults] = useState(false);
+            const [activeTab, setActiveTab] = useState('visited');
+            const [sidebarOpen, setSidebarOpen] = useState(false);
             const [selectedLocation, setSelectedLocation] = useState(null);
             const [wikiContent, setWikiContent] = useState('');
             const [isLoadingWiki, setIsLoadingWiki] = useState(false);
@@ -1154,9 +1389,7 @@
 
             const globeRef = useRef(null);
             const globeInstanceRef = useRef(null);
-            const visitedSearchTimeoutRef = useRef(null);
-            const wishlistSearchTimeoutRef = useRef(null);
-            const fileInputRef = useRef(null);
+            const searchTimeoutRef = useRef(null);
 
             // Show toast notification
             const showToast = (message, type = 'success') => {
@@ -1544,25 +1777,15 @@
             };
 
             // Search for locations using Nominatim
-            const searchLocation = async (query, type) => {
+            const searchLocation = async (query) => {
                 if (!query.trim()) {
-                    if (type === 'visited') {
-                        setVisitedSearchResults([]);
-                        setShowVisitedResults(false);
-                    } else {
-                        setWishlistSearchResults([]);
-                        setShowWishlistResults(false);
-                    }
+                    setSearchResults([]);
+                    setShowSearchResults(false);
                     return;
                 }
 
-                if (type === 'visited') {
-                    setIsSearchingVisited(true);
-                    setShowVisitedResults(true);
-                } else {
-                    setIsSearchingWishlist(true);
-                    setShowWishlistResults(true);
-                }
+                setIsSearching(true);
+                setShowSearchResults(true);
 
                 try {
                     const response = await fetch(
@@ -1576,60 +1799,31 @@
                         return !excludeTypes.includes(placeType);
                     });
 
-                    if (type === 'visited') {
-                        setVisitedSearchResults(filtered);
-                    } else {
-                        setWishlistSearchResults(filtered);
-                    }
+                    setSearchResults(filtered);
                 } catch (error) {
                     console.error('Search error:', error);
-                    if (type === 'visited') {
-                        setVisitedSearchResults([]);
-                    } else {
-                        setWishlistSearchResults([]);
-                    }
+                    setSearchResults([]);
                 } finally {
-                    if (type === 'visited') {
-                        setIsSearchingVisited(false);
-                    } else {
-                        setIsSearchingWishlist(false);
-                    }
+                    setIsSearching(false);
                 }
             };
 
-            // Debounced search for visited
+            // Debounced search
             useEffect(() => {
-                if (visitedSearchTimeoutRef.current) {
-                    clearTimeout(visitedSearchTimeoutRef.current);
+                if (searchTimeoutRef.current) {
+                    clearTimeout(searchTimeoutRef.current);
                 }
 
-                visitedSearchTimeoutRef.current = setTimeout(() => {
-                    searchLocation(visitedSearchQuery, 'visited');
+                searchTimeoutRef.current = setTimeout(() => {
+                    searchLocation(searchQuery);
                 }, 300);
 
                 return () => {
-                    if (visitedSearchTimeoutRef.current) {
-                        clearTimeout(visitedSearchTimeoutRef.current);
+                    if (searchTimeoutRef.current) {
+                        clearTimeout(searchTimeoutRef.current);
                     }
                 };
-            }, [visitedSearchQuery]);
-
-            // Debounced search for wishlist
-            useEffect(() => {
-                if (wishlistSearchTimeoutRef.current) {
-                    clearTimeout(wishlistSearchTimeoutRef.current);
-                }
-
-                wishlistSearchTimeoutRef.current = setTimeout(() => {
-                    searchLocation(wishlistSearchQuery, 'wishlist');
-                }, 300);
-
-                return () => {
-                    if (wishlistSearchTimeoutRef.current) {
-                        clearTimeout(wishlistSearchTimeoutRef.current);
-                    }
-                };
-            }, [wishlistSearchQuery]);
+            }, [searchQuery]);
 
             // Add location
             const addLocation = (location, type) => {
@@ -1654,16 +1848,8 @@
                 // Close panels and reset
                 setSelectedLocation(null);
                 setWikiContent('');
-
-                if (type === 'visited') {
-                    setVisitedSearchQuery('');
-                    setShowVisitedResults(false);
-                    setShowVisitedSearch(false);
-                } else {
-                    setWishlistSearchQuery('');
-                    setShowWishlistResults(false);
-                    setShowWishlistSearch(false);
-                }
+                setSearchQuery('');
+                setShowSearchResults(false);
 
                 // Zoom out slightly to show the point
                 if (globeInstanceRef.current) {
@@ -1702,82 +1888,133 @@
 
             const visitedPlaces = places.filter(p => p.type === 'visited');
             const wishlistPlaces = places.filter(p => p.type === 'wishlist');
+            const currentPlaces = activeTab === 'visited' ? visitedPlaces : wishlistPlaces;
+
+            // Menu icon
+            const MenuIcon = () => (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            );
 
             return (
                 <div className="app-container">
-                    {/* Visited Panel */}
-                    <div className="side-panel">
-                        <div className="panel-header">
-                            <h2>
-                                Places I've Been <span className="count-badge">{visitedPlaces.length}</span>
-                            </h2>
-                            <button
-                                className="add-place-btn"
-                                onClick={() => setShowVisitedSearch(!showVisitedSearch)}
-                            >
-                                <PlusIcon />
-                                Add to Visited
-                            </button>
-                            <div className={`search-container ${!showVisitedSearch ? 'hidden' : ''}`}>
-                                <SearchIcon />
-                                <input
-                                    type="text"
-                                    className="search-input"
-                                    placeholder="Search countries, cities..."
-                                    value={visitedSearchQuery}
-                                    onChange={(e) => setVisitedSearchQuery(e.target.value)}
-                                    onFocus={() => visitedSearchQuery && setShowVisitedResults(true)}
-                                    onBlur={() => setTimeout(() => setShowVisitedResults(false), 200)}
-                                />
-                                {showVisitedResults && (
-                                    <div className="search-results visible">
-                                        {isSearchingVisited && <div className="loading-message">Searching...</div>}
-                                        {!isSearchingVisited && visitedSearchResults.length === 0 && visitedSearchQuery && (
-                                            <div className="no-results">No locations found</div>
-                                        )}
-                                        {!isSearchingVisited && visitedSearchResults.map((result, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="search-result-item"
-                                                onClick={() => addLocation(result, 'visited')}
-                                            >
-                                                <div className="result-name">{result.name || result.display_name.split(',')[0]}</div>
-                                                <div className="result-details">{result.display_name}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                    {/* Mobile menu button */}
+                    <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+                        <MenuIcon />
+                    </button>
+
+                    {/* Mobile overlay */}
+                    <div
+                        className={`sidebar-overlay ${sidebarOpen ? 'visible' : ''}`}
+                        onClick={() => setSidebarOpen(false)}
+                    />
+
+                    {/* Tabbed Sidebar */}
+                    <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
+                        <div className="sidebar-header">
+                            <div className="sidebar-logo">Book<span>It</span>List</div>
+                            <div className="sidebar-tagline">Track your travels, plan your adventures</div>
+                            <div className="sidebar-actions">
+                                <button className="sidebar-action-btn" onClick={generateShareUrl}>
+                                    <ShareIcon /> Share
+                                </button>
                             </div>
                         </div>
-                        <div className="list-container">
-                            {visitedPlaces.length === 0 ? (
-                                <div className="empty-state">
-                                    <GlobeIcon />
-                                    <p>Click the globe or search to add places you've visited</p>
-                                </div>
-                            ) : (
-                                visitedPlaces.map(place => (
-                                    <div
-                                        key={place.id}
-                                        className="location-item"
-                                        onClick={() => focusOnPlace(place)}
-                                    >
-                                        <div className="location-info">
-                                            <div className="location-name">{place.name}</div>
+
+                        {/* Tabs */}
+                        <div className="tabs">
+                            <button
+                                className={`tab ${activeTab === 'visited' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('visited')}
+                            >
+                                Visited <span className="tab-badge">{visitedPlaces.length}</span>
+                            </button>
+                            <button
+                                className={`tab ${activeTab === 'wishlist' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('wishlist')}
+                            >
+                                Wishlist <span className="tab-badge">{wishlistPlaces.length}</span>
+                            </button>
+                        </div>
+
+                        {/* Tab Content */}
+                        <div className="tab-content">
+                            {/* Search */}
+                            <div className="panel-search">
+                                <div className="search-container">
+                                    <SearchIcon />
+                                    <input
+                                        type="text"
+                                        className="search-input"
+                                        placeholder={`Search to add to ${activeTab}...`}
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onFocus={() => searchQuery && setShowSearchResults(true)}
+                                        onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
+                                    />
+                                    {showSearchResults && (
+                                        <div className="search-results visible">
+                                            {isSearching && <div className="loading-message">Searching...</div>}
+                                            {!isSearching && searchResults.length === 0 && searchQuery && (
+                                                <div className="no-results">No locations found</div>
+                                            )}
+                                            {!isSearching && searchResults.map((result, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="search-result-item"
+                                                    onClick={() => addLocation(result, activeTab)}
+                                                >
+                                                    <div className="result-name">{result.name || result.display_name.split(',')[0]}</div>
+                                                    <div className="result-details">{result.display_name}</div>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <button
-                                            className="remove-btn"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                removeLocation(place.id);
-                                            }}
-                                            title="Remove"
-                                        >
-                                            ×
-                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Places List */}
+                            <div className="list-container">
+                                {currentPlaces.length === 0 ? (
+                                    <div className="empty-state">
+                                        <GlobeIcon />
+                                        <p>
+                                            {activeTab === 'visited'
+                                                ? "Click the globe or search to add places you've visited"
+                                                : "Click the globe or search to add places you want to visit"
+                                            }
+                                        </p>
                                     </div>
-                                ))
-                            )}
+                                ) : (
+                                    currentPlaces.map(place => (
+                                        <div
+                                            key={place.id}
+                                            className="location-item"
+                                            onClick={() => {
+                                                focusOnPlace(place);
+                                                setSidebarOpen(false);
+                                            }}
+                                        >
+                                            <div className="location-info">
+                                                <div className="location-name">{place.name}</div>
+                                            </div>
+                                            <button
+                                                className="remove-btn"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    removeLocation(place.id);
+                                                }}
+                                                title="Remove"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
                         </div>
                     </div>
 
@@ -1785,28 +2022,10 @@
                     <div className="globe-container">
                         <div id="globe" ref={globeRef}></div>
 
-                        {/* Site Header */}
+                        {/* Site Header - visible on desktop only in globe area */}
                         <div className="site-header">
                             <div className="site-logo">Book<span>It</span>List</div>
                             <div className="site-tagline">Track your travels, plan your adventures</div>
-                            <div className="site-actions">
-                                <button className="site-action-btn primary" onClick={generateShareUrl}>
-                                    <ShareIcon /> Share
-                                </button>
-                                <button className="site-action-btn secondary" onClick={exportPlaces}>
-                                    <DownloadIcon /> Export
-                                </button>
-                                <button className="site-action-btn secondary" onClick={() => fileInputRef.current?.click()}>
-                                    <UploadIcon /> Import
-                                </button>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    className="hidden-input"
-                                    accept=".json"
-                                    onChange={importPlaces}
-                                />
-                            </div>
                         </div>
 
                         {/* Temperature Filter */}
@@ -1939,7 +2158,6 @@
                                                 <div className="climate-section-title">Year-round Climate</div>
                                                 <div className="climate-chart">
                                                     {CLIMATE_DATA[selectedLocation.country].map((temp, idx) => {
-                                                        // Normalize temp to height (0-100%)
                                                         const height = ((temp + 20) / 60) * 100;
                                                         return (
                                                             <div
@@ -2000,82 +2218,6 @@
                                         </button>
                                     </div>
                                 </>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Wishlist Panel */}
-                    <div className="side-panel">
-                        <div className="panel-header">
-                            <h2>
-                                My Wishlist <span className="count-badge">{wishlistPlaces.length}</span>
-                            </h2>
-                            <button
-                                className="add-place-btn"
-                                onClick={() => setShowWishlistSearch(!showWishlistSearch)}
-                            >
-                                <PlusIcon />
-                                Add to Wishlist
-                            </button>
-                            <div className={`search-container ${!showWishlistSearch ? 'hidden' : ''}`}>
-                                <SearchIcon />
-                                <input
-                                    type="text"
-                                    className="search-input"
-                                    placeholder="Search countries, cities..."
-                                    value={wishlistSearchQuery}
-                                    onChange={(e) => setWishlistSearchQuery(e.target.value)}
-                                    onFocus={() => wishlistSearchQuery && setShowWishlistResults(true)}
-                                    onBlur={() => setTimeout(() => setShowWishlistResults(false), 200)}
-                                />
-                                {showWishlistResults && (
-                                    <div className="search-results visible">
-                                        {isSearchingWishlist && <div className="loading-message">Searching...</div>}
-                                        {!isSearchingWishlist && wishlistSearchResults.length === 0 && wishlistSearchQuery && (
-                                            <div className="no-results">No locations found</div>
-                                        )}
-                                        {!isSearchingWishlist && wishlistSearchResults.map((result, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="search-result-item"
-                                                onClick={() => addLocation(result, 'wishlist')}
-                                            >
-                                                <div className="result-name">{result.name || result.display_name.split(',')[0]}</div>
-                                                <div className="result-details">{result.display_name}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="list-container">
-                            {wishlistPlaces.length === 0 ? (
-                                <div className="empty-state">
-                                    <GlobeIcon />
-                                    <p>Click the globe or search to add places you want to visit</p>
-                                </div>
-                            ) : (
-                                wishlistPlaces.map(place => (
-                                    <div
-                                        key={place.id}
-                                        className="location-item"
-                                        onClick={() => focusOnPlace(place)}
-                                    >
-                                        <div className="location-info">
-                                            <div className="location-name">{place.name}</div>
-                                        </div>
-                                        <button
-                                            className="remove-btn"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                removeLocation(place.id);
-                                            }}
-                                            title="Remove"
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                ))
                             )}
                         </div>
                     </div>
