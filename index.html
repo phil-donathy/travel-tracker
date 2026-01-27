@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>BookItList - Your Travel Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -764,6 +764,7 @@
             display: flex;
             gap: 12px;
             padding: 20px 24px;
+            padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             background: #05203c;
             flex-shrink: 0;
@@ -956,6 +957,7 @@
             .info-panel-actions {
                 flex-direction: column;
                 padding: 12px;
+                padding-bottom: calc(20px + env(safe-area-inset-bottom, 12px));
                 gap: 8px;
             }
 
