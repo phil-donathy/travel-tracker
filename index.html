@@ -554,41 +554,73 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 8px;
+            justify-content: space-between;
+            padding: 8px 6px;
             gap: 4px;
         }
 
-        .favorite-btn {
+        .location-item.has-rating {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(255, 140, 0, 0.03) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+        }
+
+        .location-item.has-rating:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 140, 0, 0.06) 100%);
+        }
+
+        .location-item.dragging {
+            opacity: 0.5;
+            transform: scale(1.02);
+        }
+
+        .location-item.drag-over {
+            border: 2px dashed rgba(7, 112, 227, 0.5);
+            background: rgba(7, 112, 227, 0.1);
+        }
+
+        .drag-handle {
+            cursor: grab;
+            padding: 8px 4px;
+            color: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            transition: color 0.15s ease;
+        }
+
+        .drag-handle:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star-btn {
             background: none;
             border: none;
             cursor: pointer;
-            padding: 6px;
-            transition: all 0.2s ease;
-            color: rgba(255, 255, 255, 0.3);
+            padding: 2px;
+            color: rgba(255, 255, 255, 0.25);
+            transition: all 0.15s ease;
         }
 
-        .favorite-btn:hover {
+        .star-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .star-btn:hover,
+        .star-btn.filled {
             color: #ffd700;
-            transform: scale(1.15);
         }
 
-        .favorite-btn.active {
-            color: #ffd700;
-        }
-
-        .favorite-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .location-item.favorite {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .location-item.favorite:hover {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 140, 0, 0.1) 100%);
+        .star-btn.filled {
+            transform: scale(1.1);
         }
 
         .remove-btn {
@@ -1549,7 +1581,7 @@
             );
         }
 
-        // Star icon for favorites
+        // Star icon for ratings
         function StarIcon({ filled }) {
             return filled ? (
                 <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1">
@@ -1558,6 +1590,42 @@
             ) : (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+            );
+        }
+
+        // 5-star rating component
+        function StarRating({ rating, onRate }) {
+            const [hoverRating, setHoverRating] = React.useState(0);
+            return (
+                <div className="star-rating" onMouseLeave={() => setHoverRating(0)}>
+                    {[1, 2, 3, 4, 5].map(star => (
+                        <button
+                            key={star}
+                            className={`star-btn ${(hoverRating || rating) >= star ? 'filled' : ''}`}
+                            onMouseEnter={() => setHoverRating(star)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onRate(rating === star ? 0 : star);
+                            }}
+                        >
+                            <StarIcon filled={(hoverRating || rating) >= star} />
+                        </button>
+                    ))}
+                </div>
+            );
+        }
+
+        // Drag handle icon
+        function DragHandleIcon() {
+            return (
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <circle cx="9" cy="6" r="1.5"/>
+                    <circle cx="15" cy="6" r="1.5"/>
+                    <circle cx="9" cy="12" r="1.5"/>
+                    <circle cx="15" cy="12" r="1.5"/>
+                    <circle cx="9" cy="18" r="1.5"/>
+                    <circle cx="15" cy="18" r="1.5"/>
                 </svg>
             );
         }
@@ -2025,6 +2093,8 @@
             const addLocation = (location, type) => {
                 const name = location.name || location.display_name?.split(',')[0] || 'Unknown';
                 const country = location.country || location.address?.country || '';
+                // Generate a consistent seed from the place name for the photo
+                const photoSeed = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
                 const newPlace = {
                     id: Date.now(),
                     name: name,
@@ -2033,8 +2103,9 @@
                     lat: parseFloat(location.lat),
                     lng: parseFloat(location.lng || location.lon),
                     type: type,
-                    favorite: false,
-                    photoUrl: `https://source.unsplash.com/400x300/?${encodeURIComponent(name + ' city landmark')}`
+                    rating: 0,
+                    sortOrder: Date.now(),
+                    photoUrl: `https://picsum.photos/seed/${photoSeed}/200/200`
                 };
 
                 // Check for duplicates
@@ -2068,11 +2139,53 @@
                 setPlaces(prev => prev.filter(p => p.id !== id));
             };
 
-            // Toggle favorite status
-            const toggleFavorite = (id) => {
+            // Set rating for a place (0-5 stars)
+            const setRating = (id, rating) => {
                 setPlaces(prev => prev.map(p =>
-                    p.id === id ? { ...p, favorite: !p.favorite } : p
+                    p.id === id ? { ...p, rating: rating } : p
                 ));
+            };
+
+            // Drag and drop state
+            const [draggedItem, setDraggedItem] = React.useState(null);
+
+            // Handle drag start
+            const handleDragStart = (e, place) => {
+                setDraggedItem(place);
+                e.dataTransfer.effectAllowed = 'move';
+                e.target.style.opacity = '0.5';
+            };
+
+            // Handle drag end
+            const handleDragEnd = (e) => {
+                e.target.style.opacity = '1';
+                setDraggedItem(null);
+            };
+
+            // Handle drag over
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            };
+
+            // Handle drop
+            const handleDrop = (e, targetPlace) => {
+                e.preventDefault();
+                if (!draggedItem || draggedItem.id === targetPlace.id) return;
+                if (draggedItem.type !== targetPlace.type) return;
+
+                setPlaces(prev => {
+                    const updated = [...prev];
+                    const draggedIdx = updated.findIndex(p => p.id === draggedItem.id);
+                    const targetIdx = updated.findIndex(p => p.id === targetPlace.id);
+
+                    // Swap sort orders
+                    const tempOrder = updated[draggedIdx].sortOrder;
+                    updated[draggedIdx].sortOrder = updated[targetIdx].sortOrder;
+                    updated[targetIdx].sortOrder = tempOrder;
+
+                    return updated;
+                });
             };
 
             // Focus on a place when clicked in the list
@@ -2198,35 +2311,42 @@
                                     </div>
                                 ) : (
                                     currentPlaces
-                                        .sort((a, b) => (b.favorite ? 1 : 0) - (a.favorite ? 1 : 0))
+                                        .sort((a, b) => {
+                                            // First sort by rating (highest first)
+                                            if (b.rating !== a.rating) return (b.rating || 0) - (a.rating || 0);
+                                            // Then by manual sort order
+                                            return (a.sortOrder || a.id) - (b.sortOrder || b.id);
+                                        })
                                         .map(place => (
                                         <div
                                             key={place.id}
-                                            className={`location-item ${place.favorite ? 'favorite' : ''}`}
+                                            className={`location-item ${place.rating > 0 ? 'has-rating' : ''}`}
+                                            draggable
+                                            onDragStart={(e) => handleDragStart(e, place)}
+                                            onDragEnd={handleDragEnd}
+                                            onDragOver={handleDragOver}
+                                            onDrop={(e) => handleDrop(e, place)}
                                             onClick={() => {
                                                 focusOnPlace(place);
                                                 setSidebarOpen(false);
                                             }}
                                         >
+                                            <div className="drag-handle" title="Drag to reorder">
+                                                <DragHandleIcon />
+                                            </div>
                                             <div
                                                 className="location-thumb"
-                                                style={{ backgroundImage: `url(${place.photoUrl || `https://source.unsplash.com/400x300/?${encodeURIComponent(place.name + ' landmark')}`})` }}
+                                                style={{ backgroundImage: `url(${place.photoUrl || `https://picsum.photos/seed/${place.id}/200/200`})` }}
                                             />
                                             <div className="location-info">
                                                 <div className="location-name">{place.name}</div>
                                                 {place.country && <div className="location-country">{place.country}</div>}
+                                                <StarRating
+                                                    rating={place.rating || 0}
+                                                    onRate={(rating) => setRating(place.id, rating)}
+                                                />
                                             </div>
                                             <div className="location-actions">
-                                                <button
-                                                    className={`favorite-btn ${place.favorite ? 'active' : ''}`}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        toggleFavorite(place.id);
-                                                    }}
-                                                    title={place.favorite ? 'Remove from favorites' : 'Add to favorites'}
-                                                >
-                                                    <StarIcon filled={place.favorite} />
-                                                </button>
                                                 <button
                                                     className="remove-btn"
                                                     onClick={(e) => {
