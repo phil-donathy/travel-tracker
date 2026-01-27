@@ -624,6 +624,8 @@
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 70vh;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .info-panel.visible {
@@ -743,6 +745,8 @@
 
         .info-panel-content {
             padding: 20px 24px;
+            flex: 1;
+            overflow-y: auto;
         }
 
         .wiki-summary {
@@ -763,9 +767,8 @@
             gap: 12px;
             padding: 20px 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            bottom: 0;
             background: #05203c;
+            flex-shrink: 0;
         }
 
         .action-btn {
@@ -908,6 +911,7 @@
                 padding: 12px 12px;
                 font-size: 13px;
                 gap: 6px;
+                white-space: nowrap;
             }
         }
 
@@ -942,6 +946,13 @@
                 width: 26px;
                 height: 26px;
                 font-size: 9px;
+            }
+
+            .info-panel {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 16px 16px 0 0;
+                max-height: 60vh;
             }
 
             .info-panel-actions {
