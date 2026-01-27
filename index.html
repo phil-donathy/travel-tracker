@@ -193,6 +193,11 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Sidebar overlay - hidden by default on desktop */
+        .sidebar-overlay {
+            display: none;
+        }
+
         /* Site Header - hidden on desktop, visible on mobile */
         .site-header {
             position: absolute;
@@ -745,6 +750,7 @@
             }
 
             .sidebar-overlay {
+                display: block;
                 position: fixed;
                 inset: 0;
                 background: rgba(0, 0, 0, 0.6);
