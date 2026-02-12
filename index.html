@@ -767,6 +767,254 @@
             margin-top: 2px;
         }
 
+        .info-stat-value.flight-loading {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .info-stat-value.flight-price {
+            color: #00d4ff;
+        }
+
+        .flight-set-airport {
+            font-size: 11px;
+            color: #0770e3;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .flight-set-airport:hover {
+            color: #00d4ff;
+        }
+
+        .flight-set-airport-hint {
+            color: #0770e3;
+            cursor: pointer;
+        }
+
+        .flight-set-airport-hint:hover {
+            color: #00d4ff;
+        }
+
+        /* Settings panel */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .settings-panel {
+            background: #0a1e3d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 400px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .settings-close-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .settings-close-btn:hover {
+            color: #ffffff;
+        }
+
+        .settings-body {
+            padding: 24px;
+        }
+
+        .settings-field {
+            margin-bottom: 24px;
+        }
+
+        .settings-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .settings-input-wrap {
+            position: relative;
+        }
+
+        .settings-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .settings-input:focus {
+            border-color: #0770e3;
+        }
+
+        .settings-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .settings-select {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        .settings-select:focus {
+            border-color: #0770e3;
+        }
+
+        .settings-select option {
+            background: #0a1e3d;
+            color: #ffffff;
+        }
+
+        .airport-selected {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+        }
+
+        .airport-selected-name {
+            color: #ffffff;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .airport-selected-iata {
+            color: #0770e3;
+            font-weight: 700;
+            font-size: 14px;
+            background: rgba(7, 112, 227, 0.15);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .airport-clear-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .airport-clear-btn:hover {
+            color: #ff4444;
+        }
+
+        .airport-searching {
+            padding: 10px 14px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+        }
+
+        .airport-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #0c2340;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            margin-top: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .airport-result-item {
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .airport-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .airport-result-item:hover {
+            background: rgba(7, 112, 227, 0.15);
+        }
+
+        .airport-result-name {
+            color: #ffffff;
+            font-size: 13px;
+        }
+
+        .airport-result-iata {
+            margin-left: 8px;
+            color: #0770e3;
+            font-weight: 600;
+        }
+
+        .airport-result-detail {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .settings-btn {
+            padding: 6px 8px !important;
+            min-width: auto !important;
+        }
+
         .info-panel-title {
             font-size: 22px;
             font-weight: 600;
@@ -1651,9 +1899,23 @@
             const [toast, setToast] = useState(null);
             const [isViewingShared, setIsViewingShared] = useState(false);
 
+            // Flight price & settings state
+            const [homeAirport, setHomeAirport] = useState(null);
+            const [market, setMarket] = useState('UK');
+            const [currency, setCurrency] = useState('GBP');
+            const [showSettings, setShowSettings] = useState(false);
+            const [flightPrice, setFlightPrice] = useState(null);
+            const [isLoadingFlight, setIsLoadingFlight] = useState(false);
+            const [flightError, setFlightError] = useState(null);
+            const [airportSearchQuery, setAirportSearchQuery] = useState('');
+            const [airportSearchResults, setAirportSearchResults] = useState([]);
+            const [isSearchingAirports, setIsSearchingAirports] = useState(false);
+
             const globeRef = useRef(null);
             const globeInstanceRef = useRef(null);
             const searchTimeoutRef = useRef(null);
+            const flightFetchTimeoutRef = useRef(null);
+            const airportSearchTimeoutRef = useRef(null);
 
             // Show toast notification
             const showToast = (message, type = 'success') => {
@@ -1784,6 +2046,42 @@
             useEffect(() => {
                 localStorage.setItem('travelPlaces', JSON.stringify(places));
             }, [places]);
+
+            // Load settings from localStorage
+            useEffect(() => {
+                try {
+                    const saved = localStorage.getItem('bookitlist_settings');
+                    if (saved) {
+                        const s = JSON.parse(saved);
+                        if (s.homeAirport) setHomeAirport(s.homeAirport);
+                        if (s.market) setMarket(s.market);
+                        if (s.currency) setCurrency(s.currency);
+                    }
+                } catch (e) {
+                    console.error('Error loading settings:', e);
+                }
+            }, []);
+
+            // Save settings to localStorage
+            useEffect(() => {
+                localStorage.setItem('bookitlist_settings', JSON.stringify({
+                    homeAirport, market, currency,
+                }));
+            }, [homeAirport, market, currency]);
+
+            // Format price with currency symbol
+            const formatFlightPrice = useCallback((price, curr) => {
+                try {
+                    return new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: curr,
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                    }).format(price);
+                } catch (e) {
+                    return `${curr} ${Math.round(price)}`;
+                }
+            }, []);
 
             // Load country data for the globe
             useEffect(() => {
@@ -2020,6 +2318,105 @@
                 fetchWiki();
             }, [selectedLocation]);
 
+            // Debounced airport search for settings
+            useEffect(() => {
+                if (!airportSearchQuery.trim()) {
+                    setAirportSearchResults([]);
+                    return;
+                }
+                clearTimeout(airportSearchTimeoutRef.current);
+                airportSearchTimeoutRef.current = setTimeout(async () => {
+                    setIsSearchingAirports(true);
+                    try {
+                        const response = await fetch('/api/autosuggest', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ query: airportSearchQuery, market }),
+                        });
+                        const data = await response.json();
+                        setAirportSearchResults(data.airports || []);
+                    } catch (err) {
+                        console.error('Airport search error:', err);
+                        setAirportSearchResults([]);
+                    } finally {
+                        setIsSearchingAirports(false);
+                    }
+                }, 400);
+                return () => clearTimeout(airportSearchTimeoutRef.current);
+            }, [airportSearchQuery, market]);
+
+            // Fetch flight prices when location, month, or settings change
+            useEffect(() => {
+                if (!selectedLocation || !homeAirport) {
+                    setFlightPrice(null);
+                    setFlightError(null);
+                    setIsLoadingFlight(false);
+                    return;
+                }
+
+                setFlightPrice(null);
+                setFlightError(null);
+                setIsLoadingFlight(true);
+
+                clearTimeout(flightFetchTimeoutRef.current);
+                flightFetchTimeoutRef.current = setTimeout(async () => {
+                    try {
+                        // Compute year — use next year if month has passed
+                        const now = new Date();
+                        let year = now.getFullYear();
+                        const apiMonth = selectedMonth + 1; // API uses 1-12
+                        if (selectedMonth < now.getMonth()) {
+                            year += 1;
+                        }
+
+                        // Step 1: Resolve destination to nearest airport
+                        const geoRes = await fetch('/api/geo/nearest', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                lat: selectedLocation.lat,
+                                lng: selectedLocation.lng,
+                            }),
+                        });
+                        const geoData = await geoRes.json();
+
+                        if (!geoData.hasResult) {
+                            setFlightError('No airport found');
+                            setIsLoadingFlight(false);
+                            return;
+                        }
+
+                        // Step 2: Fetch indicative prices
+                        const flightRes = await fetch('/api/flights/indicative', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                originIata: homeAirport.iata,
+                                destinationEntityId: geoData.airport.entityId,
+                                year,
+                                month: apiMonth,
+                                market,
+                                currency,
+                            }),
+                        });
+                        const flightData = await flightRes.json();
+
+                        if (flightData.hasData) {
+                            setFlightPrice(flightData.minPrice);
+                        } else {
+                            setFlightError('No prices available');
+                        }
+                    } catch (err) {
+                        console.error('Flight price fetch error:', err);
+                        setFlightError('Unable to load prices');
+                    } finally {
+                        setIsLoadingFlight(false);
+                    }
+                }, 400);
+
+                return () => clearTimeout(flightFetchTimeoutRef.current);
+            }, [selectedLocation, selectedMonth, homeAirport, market, currency]);
+
             // Update points on globe when places change
             useEffect(() => {
                 if (!globeInstanceRef.current) return;
@@ -2038,6 +2435,9 @@
             const closeInfoPanel = () => {
                 setSelectedLocation(null);
                 setWikiContent('');
+                setFlightPrice(null);
+                setFlightError(null);
+                setIsLoadingFlight(false);
             };
 
             // Search for locations using Nominatim
@@ -2212,6 +2612,13 @@
             const currentPlaces = activeTab === 'visited' ? visitedPlaces : wishlistPlaces;
 
             // Menu icon
+            const SettingsIcon = () => (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+            );
+
             const MenuIcon = () => (
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -2241,6 +2648,9 @@
                             <div className="sidebar-actions">
                                 <button className="sidebar-action-btn" onClick={generateShareUrl}>
                                     <ShareIcon /> Share
+                                </button>
+                                <button className="sidebar-action-btn settings-btn" onClick={() => setShowSettings(true)} title="Settings">
+                                    <SettingsIcon />
                                 </button>
                             </div>
                         </div>
@@ -2518,9 +2928,35 @@
                                             <div className="info-stat-sublabel">{MONTHS[selectedMonth]} avg</div>
                                         </div>
                                         <div className="info-stat">
-                                            <div className="info-stat-value placeholder">—</div>
+                                            <div className={`info-stat-value ${
+                                                isLoadingFlight ? 'flight-loading' :
+                                                flightPrice != null ? 'flight-price' :
+                                                'placeholder'
+                                            }`}>
+                                                {!homeAirport ? (
+                                                    <span className="flight-set-airport" onClick={() => setShowSettings(true)}>
+                                                        Set airport
+                                                    </span>
+                                                ) : isLoadingFlight ? (
+                                                    '...'
+                                                ) : flightPrice != null ? (
+                                                    formatFlightPrice(flightPrice, currency)
+                                                ) : (
+                                                    '—'
+                                                )}
+                                            </div>
                                             <div className="info-stat-label">Flights from</div>
-                                            <div className="info-stat-sublabel">{MONTHS[selectedMonth]} avg</div>
+                                            <div className="info-stat-sublabel">
+                                                {!homeAirport ? (
+                                                    <span className="flight-set-airport-hint" onClick={() => setShowSettings(true)}>in settings</span>
+                                                ) : flightError ? (
+                                                    flightError
+                                                ) : flightPrice != null ? (
+                                                    `${MONTHS[selectedMonth]} · round trip`
+                                                ) : (
+                                                    `${MONTHS[selectedMonth]} avg`
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
@@ -2589,6 +3025,111 @@
                             )}
                         </div>
                     </div>
+
+                    {/* Settings Panel */}
+                    {showSettings && (
+                        <div className="settings-overlay" onClick={() => setShowSettings(false)}>
+                            <div className="settings-panel" onClick={(e) => e.stopPropagation()}>
+                                <div className="settings-header">
+                                    <div className="settings-title">Settings</div>
+                                    <button className="settings-close-btn" onClick={() => setShowSettings(false)}>×</button>
+                                </div>
+                                <div className="settings-body">
+                                    <div className="settings-field">
+                                        <div className="settings-label">Home Airport</div>
+                                        {homeAirport ? (
+                                            <div className="airport-selected">
+                                                <span className="airport-selected-name">{homeAirport.name}</span>
+                                                <span className="airport-selected-iata">{homeAirport.iata}</span>
+                                                <button className="airport-clear-btn" onClick={() => {
+                                                    setHomeAirport(null);
+                                                    setAirportSearchQuery('');
+                                                }}>×</button>
+                                            </div>
+                                        ) : (
+                                            <div className="settings-input-wrap">
+                                                <input
+                                                    type="text"
+                                                    className="settings-input"
+                                                    placeholder="Search airports (e.g. London, JFK)..."
+                                                    value={airportSearchQuery}
+                                                    onChange={(e) => setAirportSearchQuery(e.target.value)}
+                                                    autoFocus
+                                                />
+                                                {isSearchingAirports && (
+                                                    <div className="airport-searching">Searching...</div>
+                                                )}
+                                                {airportSearchResults.length > 0 && (
+                                                    <div className="airport-results">
+                                                        {airportSearchResults.map((airport, idx) => (
+                                                            <div key={idx} className="airport-result-item" onClick={() => {
+                                                                setHomeAirport({
+                                                                    iata: airport.iata,
+                                                                    name: airport.name,
+                                                                    entityId: airport.entityId,
+                                                                });
+                                                                setAirportSearchQuery('');
+                                                                setAirportSearchResults([]);
+                                                                showToast(`Home airport set to ${airport.iata}`);
+                                                            }}>
+                                                                <div className="airport-result-name">
+                                                                    {airport.name}
+                                                                    <span className="airport-result-iata">{airport.iata}</span>
+                                                                </div>
+                                                                <div className="airport-result-detail">
+                                                                    {airport.cityName}{airport.countryName ? `, ${airport.countryName}` : ''}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="settings-field">
+                                        <div className="settings-label">Market</div>
+                                        <select className="settings-select" value={market} onChange={(e) => setMarket(e.target.value)}>
+                                            <option value="UK">United Kingdom</option>
+                                            <option value="US">United States</option>
+                                            <option value="DE">Germany</option>
+                                            <option value="FR">France</option>
+                                            <option value="ES">Spain</option>
+                                            <option value="IT">Italy</option>
+                                            <option value="NL">Netherlands</option>
+                                            <option value="CA">Canada</option>
+                                            <option value="AU">Australia</option>
+                                            <option value="JP">Japan</option>
+                                            <option value="IN">India</option>
+                                            <option value="BR">Brazil</option>
+                                            <option value="MX">Mexico</option>
+                                            <option value="SE">Sweden</option>
+                                            <option value="NO">Norway</option>
+                                            <option value="IE">Ireland</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="settings-field">
+                                        <div className="settings-label">Currency</div>
+                                        <select className="settings-select" value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                                            <option value="GBP">GBP - British Pound</option>
+                                            <option value="USD">USD - US Dollar</option>
+                                            <option value="EUR">EUR - Euro</option>
+                                            <option value="CAD">CAD - Canadian Dollar</option>
+                                            <option value="AUD">AUD - Australian Dollar</option>
+                                            <option value="JPY">JPY - Japanese Yen</option>
+                                            <option value="INR">INR - Indian Rupee</option>
+                                            <option value="BRL">BRL - Brazilian Real</option>
+                                            <option value="MXN">MXN - Mexican Peso</option>
+                                            <option value="SEK">SEK - Swedish Krona</option>
+                                            <option value="NOK">NOK - Norwegian Krone</option>
+                                            <option value="CHF">CHF - Swiss Franc</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Toast notification */}
                     {toast && (
