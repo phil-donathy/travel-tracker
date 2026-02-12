@@ -959,6 +959,42 @@
             color: #ff4444;
         }
 
+        .settings-field-hint {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 8px;
+        }
+
+        .airport-input-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .airport-input-row .settings-input {
+            flex: 1;
+        }
+
+        .airport-set-btn {
+            padding: 10px 18px;
+            background: #0770e3;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .airport-set-btn:hover:not(:disabled) {
+            background: #0560c2;
+        }
+
+        .airport-set-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
         .airport-searching {
             padding: 10px 14px;
             color: rgba(255, 255, 255, 0.4);
@@ -2047,7 +2083,7 @@
                 localStorage.setItem('travelPlaces', JSON.stringify(places));
             }, [places]);
 
-            // Load settings from localStorage
+            // Load settings from localStorage, auto-open if no home airport
             useEffect(() => {
                 try {
                     const saved = localStorage.getItem('bookitlist_settings');
@@ -2056,6 +2092,12 @@
                         if (s.homeAirport) setHomeAirport(s.homeAirport);
                         if (s.market) setMarket(s.market);
                         if (s.currency) setCurrency(s.currency);
+                        if (!s.homeAirport) {
+                            setTimeout(() => setShowSettings(true), 1500);
+                        }
+                    } else {
+                        // First visit — prompt to set up
+                        setTimeout(() => setShowSettings(true), 1500);
                     }
                 } catch (e) {
                     console.error('Error loading settings:', e);
@@ -3037,6 +3079,7 @@
                                 <div className="settings-body">
                                     <div className="settings-field">
                                         <div className="settings-label">Home Airport</div>
+                                        <div className="settings-field-hint">Search by city or airport name, or type an IATA code (e.g. LHR, JFK)</div>
                                         {homeAirport ? (
                                             <div className="airport-selected">
                                                 <span className="airport-selected-name">{homeAirport.name}</span>
@@ -3048,14 +3091,44 @@
                                             </div>
                                         ) : (
                                             <div className="settings-input-wrap">
-                                                <input
-                                                    type="text"
-                                                    className="settings-input"
-                                                    placeholder="Search airports (e.g. London, JFK)..."
-                                                    value={airportSearchQuery}
-                                                    onChange={(e) => setAirportSearchQuery(e.target.value)}
-                                                    autoFocus
-                                                />
+                                                <div className="airport-input-row">
+                                                    <input
+                                                        type="text"
+                                                        className="settings-input"
+                                                        placeholder="e.g. London Heathrow or LHR"
+                                                        value={airportSearchQuery}
+                                                        onChange={(e) => setAirportSearchQuery(e.target.value)}
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === 'Enter' && airportSearchQuery.trim()) {
+                                                                const val = airportSearchQuery.trim().toUpperCase();
+                                                                if (val.length >= 2 && val.length <= 4) {
+                                                                    setHomeAirport({ iata: val, name: val, entityId: null });
+                                                                    setAirportSearchQuery('');
+                                                                    setAirportSearchResults([]);
+                                                                    showToast(`Home airport set to ${val}`);
+                                                                }
+                                                            }
+                                                        }}
+                                                        autoFocus
+                                                    />
+                                                    <button
+                                                        className="airport-set-btn"
+                                                        disabled={!airportSearchQuery.trim()}
+                                                        onClick={() => {
+                                                            const val = airportSearchQuery.trim().toUpperCase();
+                                                            if (val.length >= 2 && val.length <= 4) {
+                                                                setHomeAirport({ iata: val, name: val, entityId: null });
+                                                                setAirportSearchQuery('');
+                                                                setAirportSearchResults([]);
+                                                                showToast(`Home airport set to ${val}`);
+                                                            } else {
+                                                                showToast('Enter a valid IATA code (2-4 letters)', 'error');
+                                                            }
+                                                        }}
+                                                    >
+                                                        Set
+                                                    </button>
+                                                </div>
                                                 {isSearchingAirports && (
                                                     <div className="airport-searching">Searching...</div>
                                                 )}

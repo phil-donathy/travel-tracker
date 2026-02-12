@@ -22,11 +22,11 @@ module.exports = async function handler(req, res) {
         });
 
         const airports = (data.places || [])
-            .filter(p => p.iata && (p.type === 'PLACE_TYPE_AIRPORT' || p.type === 'PLACE_TYPE_CITY'))
+            .filter(p => p.iataCode && (p.type === 'PLACE_TYPE_AIRPORT' || p.type === 'PLACE_TYPE_CITY'))
             .map(p => ({
                 entityId: p.entityId,
                 name: p.name,
-                iata: p.iata,
+                iata: p.iataCode,
                 cityName: p.cityName || '',
                 countryName: p.countryName || '',
                 type: p.type,
