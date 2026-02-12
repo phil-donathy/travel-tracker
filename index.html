@@ -995,32 +995,20 @@
             cursor: default;
         }
 
-        .airport-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
+        .airport-list {
             background: #0c2340;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            margin-top: 4px;
+            margin-top: 8px;
             max-height: 200px;
             overflow-y: auto;
-            z-index: 10;
-        }
-
-        .airport-dropdown-msg {
-            padding: 10px 14px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-        }
-
-        .airport-dropdown-error {
-            color: #ff8c00;
         }
 
         .airport-result-item {
-            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
             cursor: pointer;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -1034,14 +1022,15 @@
         }
 
         .airport-result-name {
-            color: #ffffff;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 13px;
         }
 
         .airport-result-iata {
-            margin-left: 8px;
             color: #0770e3;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 14px;
+            min-width: 36px;
         }
 
         .airport-result-detail {
@@ -1659,6 +1648,80 @@
 
         // Month names
         const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        // Country name to major airport IATA code mapping
+        const COUNTRY_TO_IATA = {
+            'United States of America': 'JFK', 'Canada': 'YYZ', 'Mexico': 'MEX',
+            'Brazil': 'GRU', 'Argentina': 'EZE', 'Colombia': 'BOG', 'Chile': 'SCL', 'Peru': 'LIM',
+            'United Kingdom': 'LHR', 'France': 'CDG', 'Germany': 'FRA', 'Spain': 'MAD',
+            'Italy': 'FCO', 'Netherlands': 'AMS', 'Belgium': 'BRU', 'Switzerland': 'ZRH',
+            'Austria': 'VIE', 'Portugal': 'LIS', 'Ireland': 'DUB', 'Sweden': 'ARN',
+            'Norway': 'OSL', 'Denmark': 'CPH', 'Finland': 'HEL', 'Poland': 'WAW',
+            'Czech Republic': 'PRG', 'Czechia': 'PRG', 'Greece': 'ATH', 'Turkey': 'IST',
+            'Hungary': 'BUD', 'Romania': 'OTP', 'Croatia': 'ZAG', 'Iceland': 'KEF',
+            'Russia': 'SVO', 'Ukraine': 'KBP',
+            'Japan': 'NRT', 'China': 'PEK', 'South Korea': 'ICN', 'India': 'DEL',
+            'Thailand': 'BKK', 'Vietnam': 'SGN', 'Indonesia': 'CGK', 'Malaysia': 'KUL',
+            'Singapore': 'SIN', 'Philippines': 'MNL', 'Taiwan': 'TPE',
+            'United Arab Emirates': 'DXB', 'Saudi Arabia': 'RUH', 'Qatar': 'DOH',
+            'Israel': 'TLV', 'Egypt': 'CAI', 'Morocco': 'CMN', 'South Africa': 'JNB',
+            'Kenya': 'NBO', 'Nigeria': 'LOS', 'Ethiopia': 'ADD', 'Tanzania': 'DAR',
+            'Australia': 'SYD', 'New Zealand': 'AKL',
+            'Cuba': 'HAV', 'Jamaica': 'KIN', 'Costa Rica': 'SJO', 'Panama': 'PTY',
+            'Dominican Republic': 'PUJ', 'Ecuador': 'UIO', 'Venezuela': 'CCS', 'Uruguay': 'MVD',
+            'Pakistan': 'ISB', 'Bangladesh': 'DAC', 'Sri Lanka': 'CMB', 'Nepal': 'KTM',
+            'Cambodia': 'PNH', 'Myanmar': 'RGN', 'Laos': 'VTE',
+            'Luxembourg': 'LUX', 'Malta': 'MLA', 'Cyprus': 'LCA', 'Bulgaria': 'SOF',
+            'Serbia': 'BEG', 'Slovenia': 'LJU', 'Slovakia': 'BTS', 'Estonia': 'TLL',
+            'Latvia': 'RIX', 'Lithuania': 'VNO', 'Georgia': 'TBS',
+            'Tunisia': 'TUN', 'Algeria': 'ALG', 'Ghana': 'ACC', 'Senegal': 'DSS',
+            'Oman': 'MCT', 'Bahrain': 'BAH', 'Kuwait': 'KWI', 'Jordan': 'AMM',
+            'Lebanon': 'BEY', 'Mongolia': 'UBN', 'Uzbekistan': 'TAS',
+            'Fiji': 'NAN', 'Maldives': 'MLE', 'Mauritius': 'MRU', 'Seychelles': 'SEZ',
+        };
+
+        // Common airports for the home airport picker
+        const COMMON_AIRPORTS = [
+            { iata: 'LHR', name: 'London Heathrow' },
+            { iata: 'LGW', name: 'London Gatwick' },
+            { iata: 'STN', name: 'London Stansted' },
+            { iata: 'MAN', name: 'Manchester' },
+            { iata: 'BHX', name: 'Birmingham' },
+            { iata: 'EDI', name: 'Edinburgh' },
+            { iata: 'GLA', name: 'Glasgow' },
+            { iata: 'BRS', name: 'Bristol' },
+            { iata: 'LTN', name: 'London Luton' },
+            { iata: 'NCL', name: 'Newcastle' },
+            { iata: 'BFS', name: 'Belfast' },
+            { iata: 'LPL', name: 'Liverpool' },
+            { iata: 'EMA', name: 'East Midlands' },
+            { iata: 'ABZ', name: 'Aberdeen' },
+            { iata: 'CWL', name: 'Cardiff' },
+            { iata: 'DUB', name: 'Dublin' },
+            { iata: 'JFK', name: 'New York JFK' },
+            { iata: 'LAX', name: 'Los Angeles' },
+            { iata: 'ORD', name: 'Chicago O\'Hare' },
+            { iata: 'SFO', name: 'San Francisco' },
+            { iata: 'MIA', name: 'Miami' },
+            { iata: 'ATL', name: 'Atlanta' },
+            { iata: 'BOS', name: 'Boston' },
+            { iata: 'CDG', name: 'Paris CDG' },
+            { iata: 'FRA', name: 'Frankfurt' },
+            { iata: 'AMS', name: 'Amsterdam' },
+            { iata: 'MAD', name: 'Madrid' },
+            { iata: 'BCN', name: 'Barcelona' },
+            { iata: 'FCO', name: 'Rome Fiumicino' },
+            { iata: 'IST', name: 'Istanbul' },
+            { iata: 'DXB', name: 'Dubai' },
+            { iata: 'SIN', name: 'Singapore' },
+            { iata: 'HKG', name: 'Hong Kong' },
+            { iata: 'NRT', name: 'Tokyo Narita' },
+            { iata: 'SYD', name: 'Sydney' },
+            { iata: 'YYZ', name: 'Toronto' },
+            { iata: 'DEL', name: 'Delhi' },
+            { iata: 'BKK', name: 'Bangkok' },
+            { iata: 'DOH', name: 'Doha' },
+        ];
 
         // Average temperatures by country and month (curated data for major countries)
         // Temperature in Celsius - [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
@@ -2364,40 +2427,17 @@
                 fetchWiki();
             }, [selectedLocation]);
 
-            // Debounced airport search for settings
-            const [airportSearchError, setAirportSearchError] = useState(null);
+            // Filter common airports locally based on search query
+            const filteredAirports = useMemo(() => {
+                if (!airportSearchQuery.trim()) return COMMON_AIRPORTS;
+                const q = airportSearchQuery.trim().toLowerCase();
+                return COMMON_AIRPORTS.filter(a =>
+                    a.name.toLowerCase().includes(q) || a.iata.toLowerCase().includes(q)
+                );
+            }, [airportSearchQuery]);
+
+            // Keep legacy effect structure for cleanup (no-op now but harmless)
             useEffect(() => {
-                if (!airportSearchQuery.trim()) {
-                    setAirportSearchResults([]);
-                    setAirportSearchError(null);
-                    return;
-                }
-                clearTimeout(airportSearchTimeoutRef.current);
-                airportSearchTimeoutRef.current = setTimeout(async () => {
-                    setIsSearchingAirports(true);
-                    setAirportSearchError(null);
-                    try {
-                        const response = await fetch('/api/autosuggest', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ query: airportSearchQuery, market }),
-                        });
-                        const data = await response.json();
-                        if (data.error) {
-                            console.error('Autosuggest API error:', data.error);
-                            setAirportSearchError('Search unavailable — use IATA code + Set');
-                            setAirportSearchResults([]);
-                        } else {
-                            setAirportSearchResults(data.airports || []);
-                        }
-                    } catch (err) {
-                        console.error('Airport search error:', err);
-                        setAirportSearchError('Search unavailable — use IATA code + Set');
-                        setAirportSearchResults([]);
-                    } finally {
-                        setIsSearchingAirports(false);
-                    }
-                }, 400);
                 return () => clearTimeout(airportSearchTimeoutRef.current);
             }, [airportSearchQuery, market]);
 
@@ -2410,6 +2450,22 @@
                     return;
                 }
 
+                // Resolve destination country to IATA code
+                const destIata = COUNTRY_TO_IATA[selectedLocation.country];
+                if (!destIata) {
+                    setFlightPrice(null);
+                    setFlightError('No airport data');
+                    setIsLoadingFlight(false);
+                    return;
+                }
+
+                if (destIata === homeAirport.iata) {
+                    setFlightPrice(null);
+                    setFlightError('Same as home');
+                    setIsLoadingFlight(false);
+                    return;
+                }
+
                 setFlightPrice(null);
                 setFlightError(null);
                 setIsLoadingFlight(true);
@@ -2417,7 +2473,6 @@
                 clearTimeout(flightFetchTimeoutRef.current);
                 flightFetchTimeoutRef.current = setTimeout(async () => {
                     try {
-                        // Compute year — use next year if month has passed
                         const now = new Date();
                         let year = now.getFullYear();
                         const apiMonth = selectedMonth + 1; // API uses 1-12
@@ -2425,30 +2480,12 @@
                             year += 1;
                         }
 
-                        // Step 1: Resolve destination to nearest airport
-                        const geoRes = await fetch('/api/geo/nearest', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                lat: selectedLocation.lat,
-                                lng: selectedLocation.lng,
-                            }),
-                        });
-                        const geoData = await geoRes.json();
-
-                        if (!geoData.hasResult) {
-                            setFlightError('No airport found');
-                            setIsLoadingFlight(false);
-                            return;
-                        }
-
-                        // Step 2: Fetch indicative prices
                         const flightRes = await fetch('/api/flights/indicative', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 originIata: homeAirport.iata,
-                                destinationEntityId: geoData.airport.entityId,
+                                destinationIata: destIata,
                                 year,
                                 month: apiMonth,
                                 market,
@@ -3093,7 +3130,6 @@
                                 <div className="settings-body">
                                     <div className="settings-field">
                                         <div className="settings-label">Home Airport</div>
-                                        <div className="settings-field-hint">Search by city or airport name, or type an IATA code (e.g. LHR, JFK)</div>
                                         {homeAirport ? (
                                             <div className="airport-selected">
                                                 <span className="airport-selected-name">{homeAirport.name}</span>
@@ -3105,74 +3141,37 @@
                                             </div>
                                         ) : (
                                             <div className="settings-input-wrap">
-                                                <div className="airport-input-row">
-                                                    <input
-                                                        type="text"
-                                                        className="settings-input"
-                                                        placeholder="e.g. London Heathrow or LHR"
-                                                        value={airportSearchQuery}
-                                                        onChange={(e) => setAirportSearchQuery(e.target.value)}
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === 'Enter' && airportSearchQuery.trim()) {
-                                                                const val = airportSearchQuery.trim().toUpperCase();
-                                                                if (val.length >= 2 && val.length <= 4) {
-                                                                    setHomeAirport({ iata: val, name: val, entityId: null });
-                                                                    setAirportSearchQuery('');
-                                                                    setAirportSearchResults([]);
-                                                                    showToast(`Home airport set to ${val}`);
-                                                                }
-                                                            }
-                                                        }}
-                                                        autoFocus
-                                                    />
-                                                    <button
-                                                        className="airport-set-btn"
-                                                        disabled={!airportSearchQuery.trim()}
-                                                        onClick={() => {
+                                                <input
+                                                    type="text"
+                                                    className="settings-input"
+                                                    placeholder="Filter or type IATA code..."
+                                                    value={airportSearchQuery}
+                                                    onChange={(e) => setAirportSearchQuery(e.target.value)}
+                                                    autoFocus
+                                                />
+                                                <div className="airport-list">
+                                                    {filteredAirports.map((airport) => (
+                                                        <div key={airport.iata} className="airport-result-item" onClick={() => {
+                                                            setHomeAirport({ iata: airport.iata, name: airport.name });
+                                                            setAirportSearchQuery('');
+                                                            showToast(`Home airport set to ${airport.name} (${airport.iata})`);
+                                                        }}>
+                                                            <span className="airport-result-iata">{airport.iata}</span>
+                                                            <span className="airport-result-name">{airport.name}</span>
+                                                        </div>
+                                                    ))}
+                                                    {filteredAirports.length === 0 && airportSearchQuery.trim().length >= 2 && (
+                                                        <div className="airport-result-item" onClick={() => {
                                                             const val = airportSearchQuery.trim().toUpperCase();
-                                                            if (val.length >= 2 && val.length <= 4) {
-                                                                setHomeAirport({ iata: val, name: val, entityId: null });
-                                                                setAirportSearchQuery('');
-                                                                setAirportSearchResults([]);
-                                                                showToast(`Home airport set to ${val}`);
-                                                            } else {
-                                                                showToast('Enter a valid IATA code (2-4 letters)', 'error');
-                                                            }
-                                                        }}
-                                                    >
-                                                        Set
-                                                    </button>
+                                                            setHomeAirport({ iata: val, name: val });
+                                                            setAirportSearchQuery('');
+                                                            showToast(`Home airport set to ${val}`);
+                                                        }}>
+                                                            <span className="airport-result-iata">{airportSearchQuery.trim().toUpperCase()}</span>
+                                                            <span className="airport-result-name">Use custom code</span>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                {(isSearchingAirports || airportSearchResults.length > 0 || airportSearchError) && (
-                                                    <div className="airport-dropdown">
-                                                        {isSearchingAirports && (
-                                                            <div className="airport-dropdown-msg">Searching...</div>
-                                                        )}
-                                                        {airportSearchError && !isSearchingAirports && (
-                                                            <div className="airport-dropdown-msg airport-dropdown-error">{airportSearchError}</div>
-                                                        )}
-                                                        {airportSearchResults.map((airport, idx) => (
-                                                            <div key={idx} className="airport-result-item" onClick={() => {
-                                                                setHomeAirport({
-                                                                    iata: airport.iata,
-                                                                    name: airport.name,
-                                                                    entityId: airport.entityId,
-                                                                });
-                                                                setAirportSearchQuery('');
-                                                                setAirportSearchResults([]);
-                                                                showToast(`Home airport set to ${airport.iata}`);
-                                                            }}>
-                                                                <div className="airport-result-name">
-                                                                    {airport.name}
-                                                                    <span className="airport-result-iata">{airport.iata}</span>
-                                                                </div>
-                                                                <div className="airport-result-detail">
-                                                                    {airport.cityName}{airport.countryName ? `, ${airport.countryName}` : ''}
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
                                             </div>
                                         )}
                                     </div>

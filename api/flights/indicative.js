@@ -6,14 +6,14 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-        const { originIata, destinationEntityId, year, month, market, currency } = req.body;
-        if (!originIata || !destinationEntityId || !year || !month) {
-            return res.status(400).json({ error: 'originIata, destinationEntityId, year, month are required' });
+        const { originIata, destinationIata, year, month, market, currency } = req.body;
+        if (!originIata || !destinationIata || !year || !month) {
+            return res.status(400).json({ error: 'originIata, destinationIata, year, month are required' });
         }
 
         const mkt = market || 'UK';
         const curr = currency || 'GBP';
-        const cacheKey = `flights:${originIata}:${destinationEntityId}:${year}-${month}:${mkt}:${curr}`;
+        const cacheKey = `flights:${originIata}:${destinationIata}:${year}-${month}:${mkt}:${curr}`;
         const cached = cacheGet(cacheKey);
         if (cached) return res.json(cached);
 
@@ -22,19 +22,11 @@ module.exports = async function handler(req, res) {
                 market: mkt,
                 locale: 'en-GB',
                 currency: curr,
-                dateTimeGroupingType: 'DATE_TIME_GROUPING_TYPE_BY_MONTH',
+                dateTimeGroupingType: 'DATE_TIME_GROUPING_TYPE_BY_DATE',
                 queryLegs: [
                     {
                         originPlace: { queryPlace: { iata: originIata } },
-                        destinationPlace: { queryPlace: { entityId: destinationEntityId } },
-                        dateRange: {
-                            startDate: { year, month },
-                            endDate: { year, month },
-                        },
-                    },
-                    {
-                        originPlace: { queryPlace: { entityId: destinationEntityId } },
-                        destinationPlace: { queryPlace: { iata: originIata } },
+                        destinationPlace: { queryPlace: { iata: destinationIata } },
                         dateRange: {
                             startDate: { year, month },
                             endDate: { year, month },
