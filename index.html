@@ -775,6 +775,18 @@
             color: #00d4ff;
         }
 
+        .flight-price-link {
+            color: #00d4ff;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .flight-price-link:hover {
+            color: #4de8ff;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
         .flight-set-airport {
             font-size: 11px;
             color: #0770e3;
@@ -3032,9 +3044,18 @@
                                                     </span>
                                                 ) : isLoadingFlight ? (
                                                     '...'
-                                                ) : flightPrice != null ? (
-                                                    formatFlightPrice(flightPrice, currency)
-                                                ) : (
+                                                ) : flightPrice != null ? (() => {
+                                                    const destIata = COUNTRY_TO_IATA[selectedLocation?.country];
+                                                    if (!destIata) return formatFlightPrice(flightPrice, currency);
+                                                    const now = new Date();
+                                                    let yr = now.getFullYear();
+                                                    if (selectedMonth < now.getMonth()) yr += 1;
+                                                    const mm = String(selectedMonth + 1).padStart(2, '0');
+                                                    const yy = String(yr).slice(-2);
+                                                    const lastDay = new Date(yr, selectedMonth + 1, 0).getDate();
+                                                    const url = `https://www.skyscanner.net/transport/flights/${homeAirport.iata.toLowerCase()}/${destIata.toLowerCase()}/${yy}${mm}01/${yy}${mm}${lastDay}/`;
+                                                    return <a href={url} target="_blank" rel="noopener noreferrer" className="flight-price-link">{formatFlightPrice(flightPrice, currency)}</a>;
+                                                })() : (
                                                     '—'
                                                 )}
                                             </div>
