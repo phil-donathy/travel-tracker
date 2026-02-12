@@ -995,13 +995,7 @@
             cursor: default;
         }
 
-        .airport-searching {
-            padding: 10px 14px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-        }
-
-        .airport-results {
+        .airport-dropdown {
             position: absolute;
             top: 100%;
             left: 0;
@@ -1013,6 +1007,16 @@
             max-height: 200px;
             overflow-y: auto;
             z-index: 10;
+        }
+
+        .airport-dropdown-msg {
+            padding: 10px 14px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+        }
+
+        .airport-dropdown-error {
+            color: #ff8c00;
         }
 
         .airport-result-item {
@@ -2361,14 +2365,17 @@
             }, [selectedLocation]);
 
             // Debounced airport search for settings
+            const [airportSearchError, setAirportSearchError] = useState(null);
             useEffect(() => {
                 if (!airportSearchQuery.trim()) {
                     setAirportSearchResults([]);
+                    setAirportSearchError(null);
                     return;
                 }
                 clearTimeout(airportSearchTimeoutRef.current);
                 airportSearchTimeoutRef.current = setTimeout(async () => {
                     setIsSearchingAirports(true);
+                    setAirportSearchError(null);
                     try {
                         const response = await fetch('/api/autosuggest', {
                             method: 'POST',
@@ -2376,9 +2383,16 @@
                             body: JSON.stringify({ query: airportSearchQuery, market }),
                         });
                         const data = await response.json();
-                        setAirportSearchResults(data.airports || []);
+                        if (data.error) {
+                            console.error('Autosuggest API error:', data.error);
+                            setAirportSearchError('Search unavailable — use IATA code + Set');
+                            setAirportSearchResults([]);
+                        } else {
+                            setAirportSearchResults(data.airports || []);
+                        }
                     } catch (err) {
                         console.error('Airport search error:', err);
+                        setAirportSearchError('Search unavailable — use IATA code + Set');
                         setAirportSearchResults([]);
                     } finally {
                         setIsSearchingAirports(false);
@@ -3129,11 +3143,14 @@
                                                         Set
                                                     </button>
                                                 </div>
-                                                {isSearchingAirports && (
-                                                    <div className="airport-searching">Searching...</div>
-                                                )}
-                                                {airportSearchResults.length > 0 && (
-                                                    <div className="airport-results">
+                                                {(isSearchingAirports || airportSearchResults.length > 0 || airportSearchError) && (
+                                                    <div className="airport-dropdown">
+                                                        {isSearchingAirports && (
+                                                            <div className="airport-dropdown-msg">Searching...</div>
+                                                        )}
+                                                        {airportSearchError && !isSearchingAirports && (
+                                                            <div className="airport-dropdown-msg airport-dropdown-error">{airportSearchError}</div>
+                                                        )}
                                                         {airportSearchResults.map((airport, idx) => (
                                                             <div key={idx} className="airport-result-item" onClick={() => {
                                                                 setHomeAirport({
