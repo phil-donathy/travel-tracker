@@ -2504,16 +2504,25 @@
                                 currency,
                             }),
                         });
+
+                        if (!flightRes.ok) {
+                            const errText = await flightRes.text().catch(() => '');
+                            console.error(`Flight API ${flightRes.status}: ${errText}`);
+                            setFlightError(`API error (${flightRes.status})`);
+                            return;
+                        }
+
                         const flightData = await flightRes.json();
 
                         if (flightData.hasData) {
                             setFlightPrice(flightData.minPrice);
+                            setFlightError(null);
                         } else {
                             setFlightError('No prices available');
                         }
                     } catch (err) {
                         console.error('Flight price fetch error:', err);
-                        setFlightError('Unable to load prices');
+                        setFlightError(`Unable to load prices (${err.message})`);
                     } finally {
                         setIsLoadingFlight(false);
                     }
